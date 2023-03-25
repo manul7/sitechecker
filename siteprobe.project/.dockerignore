@@ -1,0 +1,12 @@
+.git/
+tests
+.idea/
+.vscode/
+
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.dockerignore
+readme.md
+*.Dockerfile
