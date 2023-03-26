@@ -2,6 +2,15 @@ import logging.config
 import os
 
 
+def is_file_exist(file_path: str):
+    """Check if a file exists.
+    :param file_path: Path to the file.
+    :return: True if the file exists, False otherwise.
+    """
+    if not os.path.isfile(file_path):
+        raise FileNotFoundError(f"File {file_path} does not exist.")
+
+
 def is_empty_env_var(var_name: str):
     """Get the value of an environment variable.
     :param var_name: Name of the environment variable.
@@ -76,6 +85,9 @@ CHECK_INTERVAL = os.getenv("CHECK_INTERVAL", 10)
 # List of targets
 TARGETS = [{"url": "https://example.com", "regex pattern": "Example Domain"}]
 
+# It's worth to check if all the environment variables are set as it's human input.
 for var in ["KAFKA_SERVICE_URI", "DATABASE_URI"]:
     is_empty_env_var(var)
 
+for file in [kafka_config["ssl_cafile"], kafka_config["ssl_certfile"], kafka_config["ssl_keyfile"]]:
+    is_file_exist(file)
