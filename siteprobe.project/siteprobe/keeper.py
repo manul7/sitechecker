@@ -1,6 +1,6 @@
 import argparse
 import logging
-from typing import List
+from typing import List, Union
 import psycopg2
 from kafka import KafkaConsumer
 from kafka.errors import NoBrokersAvailable
@@ -32,26 +32,18 @@ def get_consumer(topic_name: str):
         return
 
 
-def create_table(conn, script: str):
-    """Create a table in the database using the provided SQL script.
+def execute_sql_script(conn, script: str, data: Union[List, None] = None):
+    """Execute a SQL script.
     :param conn: Database connection.
-    :param script: SQL script to create the table.
-    """
-    with conn:
-        with conn.cursor() as cursor:
-            cursor.execute(script)
-            conn.commit()
-
-
-def insert_check_result(conn, script: str, data: List):
-    """Insert a new row into the database.
-    :param conn: Database connection.
-    :param script: SQL script to insert a new row.
+    :param script: SQL script to execute.
     :param data: Data to insert.
     """
     with conn:
         with conn.cursor() as cursor:
-            cursor.execute(script, data)
+            if data is None:
+                cursor.execute(script)
+            else:
+                cursor.execute(script, data)
             conn.commit()
 
 
@@ -66,9 +58,11 @@ def process(conn, consumer, metric_type: str):
             for message in consumer.poll().values():
                 data = message[0].value.decode("utf-8").split(",")
                 if metric_type == "availability":
-                    insert_check_result(conn, sql_scripts.insert_availability_row, data)
+                    logger.debug("Inserting availability data: %s", data)
+                    execute_sql_script(conn, sql_scripts.insert_availability_row, data)
                 else:
-                    insert_check_result(conn, sql_scripts.insert_content_row, data)
+                    logger.debug("Inserting content data: %s", data)
+                    execute_sql_script(conn, sql_scripts.insert_content_row, data)
     except KeyboardInterrupt:
         conn.close()
 
@@ -94,7 +88,9 @@ def main():
         table_script = sql_scripts.content_table_script
 
     consumer = get_consumer(topic)
-    create_table(db_connection, table_script)
+    logger.info("Connected to the Kafka broker.")
+    execute_sql_script(db_connection, table_script)
+    logger.info("Table for %s metrics set.", args.mtype)
     process(db_connection, consumer, args.mtype)
 
 
