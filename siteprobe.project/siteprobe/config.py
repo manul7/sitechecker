@@ -60,7 +60,7 @@ KAFKA_CONTENT_CONSUMER_ID = os.getenv("KAFKA_CONTENT_CONSUMER_ID", "ContentConsu
 DATABASE_URI = os.getenv("DATABASE_URI")
 
 # Global checks interval in seconds
-CHECK_INTERVAL_SEC = os.getenv("CHECK_INTERVAL", 10)
+CHECK_INTERVAL = os.getenv("CHECK_INTERVAL", 10)
 
 # List of targets
 TARGETS = [{"url": "https://example.com", "regex pattern": "Example Domain"}]

@@ -38,7 +38,7 @@ def main():
                     producer.send(config.TOPIC_CONTENT, message.encode("utf-8"))
                     logger.debug("Content message: %s", message)
             # Wait before next check
-            time.sleep(config.CHECK_INTERVAL_SEC)
+            time.sleep(config.CHECK_INTERVAL)
     # TODO: Replace with a more specific exception
     except KeyboardInterrupt:
         producer.close()
