@@ -1,6 +1,7 @@
 import argparse
 import logging
 from typing import List, Union
+
 import psycopg2
 from kafka import KafkaConsumer
 from kafka.errors import NoBrokersAvailable
@@ -92,7 +93,6 @@ def main():
     execute_sql_script(db_connection, table_script)
     logger.info("Table for %s metrics set.", args.mtype)
     process(db_connection, consumer, args.mtype)
-
 
 
 if __name__ == "__main__":

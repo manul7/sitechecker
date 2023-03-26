@@ -22,32 +22,22 @@ def is_empty_env_var(var_name: str):
 
 
 logger_config = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'simple': {
-            'format': '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-        }
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "simple": {"format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"}
     },
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'simple',
-            'level': logging.DEBUG
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+            "level": logging.DEBUG,
         },
     },
-    'loggers': {
-        'keeper': {
-            'handlers': ['console'],
-            'level': logging.DEBUG,
-            'propagate': False
-        },
-        'probe': {
-            'handlers': ['console'],
-            'level': logging.DEBUG,
-            'propagate': False
-        }
-    }
+    "loggers": {
+        "keeper": {"handlers": ["console"], "level": logging.DEBUG, "propagate": False},
+        "probe": {"handlers": ["console"], "level": logging.DEBUG, "propagate": False},
+    },
 }
 
 # Configure the logger using the dictionary configuration
@@ -89,5 +79,9 @@ TARGETS = [{"url": "https://example.com", "regex pattern": "Example Domain"}]
 for var in ["KAFKA_SERVICE_URI", "DATABASE_URI"]:
     is_empty_env_var(var)
 
-for file in [kafka_config["ssl_cafile"], kafka_config["ssl_certfile"], kafka_config["ssl_keyfile"]]:
+for file in [
+    kafka_config["ssl_cafile"],
+    kafka_config["ssl_certfile"],
+    kafka_config["ssl_keyfile"],
+]:
     is_file_exist(file)
