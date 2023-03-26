@@ -7,3 +7,20 @@ services:
       - ".env"
     environment:
       - "KAFKA_SERVICE_URI=${KAFKA_SERVICE_URI}"
+
+  availability_handler:
+    image: "keeper:1"
+    container_name: "siteprobe_consumer_availability"
+    env_file:
+      - ".env"
+    environment:
+      - "KAFKA_SERVICE_URI=${KAFKA_SERVICE_URI}"
+
+  content_handler:
+    image: "keeper:1"
+    container_name: "siteprobe_consumer_content"
+    env_file:
+      - ".env"
+    environment:
+      - "KAFKA_SERVICE_URI=${KAFKA_SERVICE_URI}"
+      - "MTYPE=content"
