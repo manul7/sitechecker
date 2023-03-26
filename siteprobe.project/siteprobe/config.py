@@ -1,12 +1,37 @@
-import logging
+import logging.config
 import os
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[logging.StreamHandler()],
-)
+logger_config = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {
+            'format': '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        }
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+            'level': logging.DEBUG
+        },
+    },
+    'loggers': {
+        'keeper': {
+            'handlers': ['console'],
+            'level': logging.DEBUG,
+            'propagate': False
+        },
+        'probe': {
+            'handlers': ['console'],
+            'level': logging.DEBUG,
+            'propagate': False
+        }
+    }
+}
+
+# Configure the logger using the dictionary configuration
+logging.config.dictConfig(logger_config)
 
 # Kafka topics
 # Availability checks
