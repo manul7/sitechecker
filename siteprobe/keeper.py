@@ -57,18 +57,24 @@ def process(conn, consumer, metric_type: str):
     :param consumer: Kafka consumer.
     :param metric_type: Metric type.
     """
-    try:
-        while True:
-            for message in consumer.poll().values():
-                data = message[0].value.decode("utf-8").split(",")
-                if metric_type == "availability":
-                    logger.debug("Inserting availability data: %s", data)
-                    execute_sql_script(conn, sql_scripts.insert_availability_row, data)
-                else:
-                    logger.debug("Inserting content data: %s", data)
-                    execute_sql_script(conn, sql_scripts.insert_content_row, data)
-    except KeyboardInterrupt:
-        conn.close()
+    for message in consumer.poll().values():
+        data = message[0].value.decode("utf-8").split(",")
+        if len(data) == 1:
+            logger.warning("Empty message received.")
+            continue
+        if metric_type == config.ARG_AVAIL:
+            # XXX: Karaspace is not used.
+            if len(data) != 3:
+                logger.warning("Invalid availability message received: %s", data)
+                continue
+            logger.debug("Inserting availability data: %s", data)
+            execute_sql_script(conn, sql_scripts.insert_availability_row, data)
+        if metric_type == config.ARG_CONTENT:
+            if len(data) != 2:
+                logger.warning("Invalid availability message received: %s", data)
+                continue
+            logger.debug("Inserting content data: %s", data)
+            execute_sql_script(conn, sql_scripts.insert_content_row, data)
 
 
 def main():
@@ -95,7 +101,12 @@ def main():
     logger.info("Connected to the Kafka broker.")
     execute_sql_script(db_connection, table_script)
     logger.info("Table for %s metrics set.", args.mtype)
-    process(db_connection, consumer, args.mtype)
+    try:
+        while True:
+            process(db_connection, consumer, args.mtype)
+    except KeyboardInterrupt:
+        db_connection.close()
+        consumer.close()
 
 
 if __name__ == "__main__":
