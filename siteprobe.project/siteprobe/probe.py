@@ -24,7 +24,10 @@ def get_producer():
         return producer
     except NoBrokersAvailable:
         logger.error("Unable to connect to the Kafka broker.")
-        return
+        raise
+    except FileNotFoundError:
+        logger.exception("Unable to find SSL files. Please check configuration")
+        raise
 
 
 def process(producer, targets: List):
