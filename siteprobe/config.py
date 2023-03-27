@@ -29,6 +29,10 @@ TOPIC_AVAILABILITY = "site_availability"
 # Content checks
 TOPIC_CONTENT = "site_content"
 
+# Arguments
+ARG_AVAIL = "availability"
+ARG_CONTENT = "content"
+
 # Kafka connection configuration
 kafka_config = {
     # Kafka connection URI

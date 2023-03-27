@@ -74,7 +74,7 @@ def process(conn, consumer, metric_type: str):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "mtype", choices=["availability", "content"], help="Metric type"
+        "mtype", choices=[config.ARG_AVAIL, config.ARG_CONTENT], help="Metric type"
     )
     # Try to establish a connection to the database before moving to the next step.
     try:
@@ -84,7 +84,7 @@ def main():
         return
 
     args = parser.parse_args()
-    if args.mtype == "availability":
+    if args.mtype == config.ARG_AVAIL:
         topic = config.TOPIC_AVAILABILITY
         table_script = sql_scripts.availability_table_script
     else:
