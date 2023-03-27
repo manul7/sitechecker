@@ -5,16 +5,16 @@ services:
     container_name: "siteprobe_producer"
     env_file:
       - ".env"
-    environment:
-      - "KAFKA_SERVICE_URI=${KAFKA_SERVICE_URI}"
+    volumes:
+      - ./access:/app/access
 
   availability_handler:
     image: "keeper:1"
     container_name: "siteprobe_consumer_availability"
     env_file:
       - ".env"
-    environment:
-      - "KAFKA_SERVICE_URI=${KAFKA_SERVICE_URI}"
+    volumes:
+      - ./access:/app/access
 
   content_handler:
     image: "keeper:1"
@@ -22,5 +22,6 @@ services:
     env_file:
       - ".env"
     environment:
-      - "KAFKA_SERVICE_URI=${KAFKA_SERVICE_URI}"
       - "MTYPE=content"
+    volumes:
+      - ./access:/app/access
