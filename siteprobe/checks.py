@@ -1,6 +1,7 @@
-import time
-import requests
 import re
+import time
+
+import requests
 
 # This can be moved to a config file, but for simplicity it's here
 PRECISION = 6
