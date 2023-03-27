@@ -11,12 +11,12 @@ logger_config = {
         "console": {
             "class": "logging.StreamHandler",
             "formatter": "simple",
-            "level": logging.DEBUG,
+            "level": logging.INFO,
         },
     },
     "loggers": {
-        "keeper": {"handlers": ["console"], "level": logging.DEBUG, "propagate": False},
-        "probe": {"handlers": ["console"], "level": logging.DEBUG, "propagate": False},
+        "keeper": {"handlers": ["console"], "level": logging.INFO, "propagate": False},
+        "probe": {"handlers": ["console"], "level": logging.INFO, "propagate": False},
     },
 }
 
