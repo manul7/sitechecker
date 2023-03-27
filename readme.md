@@ -4,7 +4,7 @@ This is sample application, which purpose is to probe Kafka and PostgreSQL servi
 # Overall goal
 Try Kafka and ProstgreSQL services to implement a simple site monitoring application using them and Python.
 
-# Hight level architecture
+# High level architecture
 The application consists of the following components:
 1. Website checker
 2. Database writer
@@ -19,3 +19,13 @@ This app should perform the checks _periodically_ and collect the _HTTP response
 The database writer is a Python program that reads the check results from the Kafka topics and writes them to a PostgreSQL database.
 This app records the check results into one or more database tables and could handle a reasonable amount of checks performed over a longer period of time.
 This app will not be based on ORM libraries, but rather on the Python DB API compliant library and raw SQL queries.
+
+# Documentation
+* Prerequisites are described in the [prerequisites](docs/prerequisites.md) file.
+* All architecture decisions can be found in the [docs](docs) directory.
+
+# Launch
+To launch the application, run the following command:
+```bash
+bash launch.sh
+```
